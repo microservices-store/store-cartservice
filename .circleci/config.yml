@@ -1,0 +1,22 @@
+
+version: 2.1
+
+orbs:
+  docker: circleci/docker@0.5.20
+
+workflows:
+  jobs:
+    build-and-push:
+      executor: docker/docker
+      steps:
+        - setup_remote_docker
+        - checkout
+        - docker/check
+        - docker/build:
+            image: deployhub/store-cartservice:latest
+        - docker/push:
+            digest-path: /tmp/digest.txt
+            image: deployhub/store-cartservice:latest
+        - run:
+            command: |
+              echo "Digest is: $(</tmp/digest.txt)"
