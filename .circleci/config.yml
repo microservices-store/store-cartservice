@@ -3,6 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
+  deployhub-orb: deployhub/deployhub-orb@1.53.0
 
 jobs:
   build-and-push:
@@ -21,9 +22,14 @@ jobs:
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
+      - deployhub-orb/compupdate:
+              dhuser: admin
+              dhpass: admin
+              dhurl: http://exchange.openmakesoftware.com:8080
+              application: Uptime War for Tomcat;14  
   
 workflows:
-  commit:
+  build-push-dh-update:
     jobs:
       - build-and-push
       
