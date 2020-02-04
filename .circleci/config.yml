@@ -32,11 +32,11 @@ jobs:
               dockersha: $(</tmp/digest.txt)
               dockerrepo: deployhub/store-cartservice
               builddate:  $(date)
-              gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-              giturl: $CIRCLE_REPOSITORY_URL
-              gitcommit: $CIRCLE_SHA1
-              buildid: $CIRCLE_BUILD_URL
-              buildnumber: $CIRCLE_BUILD_NUM
+              gitrepo: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+              giturl: ${CIRCLE_REPOSITORY_URL}
+              gitcommit: ${CIRCLE_SHA1}
+              buildid: ${CIRCLE_BUILD_URL}
+              buildnumber: ${CIRCLE_BUILD_NUM}
   
 workflows:
   on-commit:
