@@ -13,11 +13,9 @@ jobs:
       - docker/check
       - docker/build:
           image: deployhub/store-cartservice
-          tag: latest
       - docker/push:
           digest-path: /tmp/digest.txt
           image: deployhub/store-cartservice
-          tag: latest
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
