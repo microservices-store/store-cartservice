@@ -23,7 +23,20 @@ jobs:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/compupdate:
-              application: Uptime War for Tomcat;14  
+              application: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
+              appversion: 1.2.9.1
+              compname: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice
+              compversion: v0.1.1-4-g$CIRCLE_SHA1
+              comptype: --docker
+              helmchart: helm/cartservice
+              dockersha: $(</tmp/digest.txt)
+              dockerrepo: deployhub/store-cartservice
+              builddate:  $(date)
+              gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+              giturl: $CIRCLE_REPOSITORY_URL
+              gitcommit: $CIRCLE_SHA1
+              buildid: $CIRCLE_BUILD_URL
+              buildnumber: $CIRCLE_BUILD_NUM
   
 workflows:
   on-commit:
