@@ -6,7 +6,7 @@ orbs:
   deployhub-orb: deployhub/deployhub-orb@1.53.0
 
 jobs:
-  build-and-push:
+  build-push-dh-update:
     executor: docker/docker
     steps:
       - setup_remote_docker
@@ -23,13 +23,10 @@ jobs:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/compupdate:
-              dhuser: admin
-              dhpass: admin
-              dhurl: http://exchange.openmakesoftware.com:8080
               application: Uptime War for Tomcat;14  
   
 workflows:
-  build-push-dh-update:
+  on-commit:
     jobs:
-      - build-and-push
+      - build-push-dh-update
       
