@@ -25,7 +25,7 @@ steps:
     entrypoint: 'bash'
     env:
       - 'DOCKER_CONFIG=/workspace/docker-config'
-    args: ['-c', "docker images quay.io/hipsterstore/cartservice:master-v0.1.1-4-g$SHORT_SHA -q > /workspace/imageid.txt" ]
+    args: ['-c', "docker inspect --format='{{index .RepoDigests 0}}' quay.io/hipsterstore/cartservice:master-v0.1.1-4-g$SHORT_SHA > /workspace/digest.txt" ]
 
   # Capture new component version in DeployHub
   - name: 'quay.io/deployhub/compupdate'
@@ -41,7 +41,7 @@ steps:
       "--compattr", "GitUrl:https://github.com/ortelius/store-cartservice", 
       "--compattr", "GitRepo:ortelius/store-cartservice", 
       "--compattr", "Chart:cartservice",
-      "--compattr", "DockerSha:@/workspace/imageid.txt",
+      "--compattr", "DockerSha:@/workspace/digest.txt",
       "--compattr", "DockerBuildDate:@/workspace/blddate.txt",
       "--compattr", "DockerRepo:quay.io/hipsterstore/cartservice",
       "--compattr", "BuildId:$BUILD_ID"]
