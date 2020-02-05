@@ -44,7 +44,8 @@ steps:
       "--compattr", "DockerSha:@/workspace/digest.txt",
       "--compattr", "DockerBuildDate:@/workspace/blddate.txt",
       "--compattr", "DockerRepo:quay.io/hipsterstore/cartservice",
-      "--compattr", "BuildId:$BUILD_ID"]
+      "--compattr", "BuildId:$BUILD_ID",
+      "--compattr", "BuildUrl:https://console.cloud.google.com/cloud-build/builds/$BUILD_ID/project=$PROJECT_ID"]
 
 secrets:
 - kmsKeyName: projects/eighth-physics-169321/locations/global/keyRings/cli/cryptoKeys/quay
