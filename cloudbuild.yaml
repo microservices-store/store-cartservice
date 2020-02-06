@@ -2,7 +2,7 @@ steps:
   # Save IMAGE_TAG
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', 'rm -rf * 2>/dev/null;rm -rf .* 2>/dev/null;git clone https://github.com/ortelius/$REPO_NAME']
+    args: ['-c', 'rm -rf * 2>/dev/null;rm -rf .* 2>/dev/null;git clone https://github.com/ortelius/$REPO_NAME .']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
     args: ['-c', 'git checkout "$TAG_NAME" || git checkout "$BRANCH_NAME"']
