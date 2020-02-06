@@ -40,7 +40,7 @@ steps:
     entrypoint: 'bash'
     env:
       - 'DOCKER_CONFIG=/workspace/docker-config'
-    args: ['-c', "docker inspect --format='{{index .RepoDigests 0' $_DOCKER_REPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA > DIGEST" ]
+    args: ['-c', "docker inspect --format='{{index .RepoDigests 0}}' $_DOCKER_REPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA > DIGEST" ]
 
   # Capture new component version in DeployHub
   - name: 'quay.io/deployhub/compupdate'
