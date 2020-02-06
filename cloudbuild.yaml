@@ -1,12 +1,12 @@
 steps:
   # Save IMAGE_TAG
-  - name: gcr.io/cloud-builders/git
+  - name: gcr.io/cloud-builders/docker
     args: ["fetch", "--unshallow"]
-  - name: gcr.io/cloud-builders/git
+  - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
     args: ["-c", "echo ${_MAJOR}.${_MINOR}.${_PATCH}.$(git rev-list --count ${BRANCH_NAME}) > IMAGE_TAG"]
   # Save BLDDATE    
-  - name: gcr.io/cloud-builders/git
+  - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
     args: ["-c", "date -u +'%Y-%m-%dT%H:%M:%SZ' > BLDDATE"]
   # Build the image and save details as part of the LABEL
