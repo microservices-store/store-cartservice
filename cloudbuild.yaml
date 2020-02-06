@@ -5,14 +5,14 @@ steps:
     args: ['-c', 'ls -A1 | xargs rm -rf;git clone $_GIT_URL .']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', 'git checkout "$TAG_NAME" 2>/dev/null || git checkout "$BRANCH_NAME"']
+    args: ['-c', 'git checkout "$TAG_NAME" 2>/dev/null || git checkout "$BRANCH_NAME";ls -R']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ["-c", "echo $_MAJOR.$_MINOR.$_PATCH.$(git rev-list --count $BRANCH_NAME) > IMAGE_TAG"]
+    args: ["-c", "echo $_MAJOR.$_MINOR.$_PATCH.$(git rev-list --count $BRANCH_NAME) > IMAGE_TAG;cat IMAGE_TAG"]
   # Save BLDDATE    
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ["-c", "date -u +'%Y-%m-%dT%H:%M:%SZ' > BLDDATE"]
+    args: ["-c", "date -u +'%Y-%m-%dT%H:%M:%SZ' > BLDDATE;cat BLDDATE"]
   # Build the image and save details as part of the LABEL
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
