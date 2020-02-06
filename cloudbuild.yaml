@@ -46,7 +46,7 @@ steps:
   - name: 'quay.io/deployhub/compupdate'
     entrypoint: 'bash'
     secretEnv: ['DHUSER', 'DHPASS']
-    args: ['-c', 'dh updatecomp --dhurl https://console.deployhub.com --appname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale" --appversion "1.2.9.1" --compname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice" --compvariant $BRANCH_NAME --compversion v$(cat IMAGE_TAG)-g$SHORT_SHA --docker --compattr "GitCommit:$SHORT_SHA" --compattr "GitUrl:$_GIT_URL" --compattr "GitRepo:$REPO_NAME" --compattr "GitTag:$TAG_NAME" --compattr "GitBranch:$BRANCH_NAME" --compattr "Chart:cartservice" --compattr "DockerSha:@DIGEST" --compattr "DockerBuildDate:@BLDDATE" --compattr "DockerRepo:$_DOCKER_REPO" --compattr "BuildId:$BUILD_ID" --compattr "BuildUrl:https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=$PROJECT_ID"']
+    args: ['-c', 'dh updatecomp --dhurl https://console.deployhub.com --appname "$_APP_NAME" --appversion "$_APP_VERSION" --compname "$_COMP_NAME" --compvariant $BRANCH_NAME --compversion v$(cat IMAGE_TAG)-g$SHORT_SHA --docker --compattr "GitCommit:$SHORT_SHA" --compattr "GitUrl:$_GIT_URL" --compattr "GitRepo:$REPO_NAME" --compattr "GitTag:$TAG_NAME" --compattr "GitBranch:$BRANCH_NAME" --compattr "Chart:$_CHART_NAME" --compattr "DockerSha:@DIGEST" --compattr "DockerBuildDate:@BLDDATE" --compattr "DockerRepo:$_DOCKER_REPO" --compattr "BuildId:$BUILD_ID" --compattr "BuildUrl:https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=$PROJECT_ID"']
 
 secrets:
 - kmsKeyName: projects/eighth-physics-169321/locations/global/keyRings/cli/cryptoKeys/quay
