@@ -12,7 +12,7 @@ steps:
   # Save BLDDATE    
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ["-c", "date -u +'%Y-%m-%dT%H:%M:%SZ' > BLDDATE;cat BLDDATE"]
+    args: ["-c", "date > BLDDATE;cat BLDDATE"]
   # Build the image and save details as part of the LABEL
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
