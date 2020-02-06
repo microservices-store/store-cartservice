@@ -2,7 +2,10 @@ steps:
   # Save IMAGE_TAG
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', "git fetch --unshallow"]
+    args: ['-c', 'rm -rf * && rm -rf .* && git clone $REPO_NAME']
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: 'bash'
+    args: ['-c', 'git checkout "$TAG_NAME" || git checkout "$BRANCH_NAME"']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
     args: ["-c", "echo ${_MAJOR}.${_MINOR}.${_PATCH}.$(git rev-list --count ${BRANCH_NAME}) > IMAGE_TAG"]
