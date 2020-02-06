@@ -2,13 +2,13 @@ steps:
   # Save IMAGE_TAG
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', 'ls -A1 | xargs rm -rf;git clone ${_GIT_URL} .']
+    args: ['-c', 'ls -A1 | xargs rm -rf;git clone $_GIT_URL .']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', 'git checkout "${TAG_NAME}" 2>/dev/null || git checkout "${BRANCH_NAME}"']
+    args: ['-c', 'git checkout "$TAG_NAME" 2>/dev/null || git checkout "$BRANCH_NAME"']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ["-c", "echo ${_MAJOR}.${_MINOR}.${_PATCH}.$(git rev-list --count ${BRANCH_NAME}) > IMAGE_TAG"]
+    args: ["-c", "echo $_MAJOR.$_MINOR.$_PATCH.$(git rev-list --count $BRANCH_NAME) > IMAGE_TAG"]
   # Save BLDDATE    
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
@@ -16,7 +16,7 @@ steps:
   # Build the image and save details as part of the LABEL
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: ["-c", "docker build --tag ${_DOCKER_REPO}:${BRANCH_NAME}-v$(cat IMAGE_TAG)-g${SHORT_SHA} --build-arg BLDDATE=$(cat BLDDATE) --build-arg REPO_NAME=${REPO_NAME} --build-arg COMMIT_SHA=${COMMIT_SHA} --build-arg SHORT_SHA=${SHORT_SHA} --build-arg PROJECT_ID=${PROJECT_ID} --build-arg BUILD_ID=${BUILD_ID} --build-arg BRANCH_NAME=${BRANCH_NAME} --build-arg TAG_NAME=${TAG_NAME} --build-arg REVISION_ID=${REVISION_ID} ."]
+    args: ["-c", "docker build --tag $_DOCKER_REPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA --build-arg BLDDATE=$(cat BLDDATE) --build-arg REPO_NAME=$REPO_NAME --build-arg COMMIT_SHA=$COMMIT_SHA --build-arg SHORT_SHA=$SHORT_SHA --build-arg PROJECT_ID=$PROJECT_ID --build-arg BUILD_ID=$BUILD_ID --build-arg BRANCH_NAME=$BRANCH_NAME --build-arg TAG_NAME=$TAG_NAME --build-arg REVISION_ID=$REVISION_ID ."]
     
   # Login to Quay for push.
   # PASSWORD is decrypted before this step runs.
@@ -33,14 +33,14 @@ steps:
     entrypoint: 'bash'
     env:
       - 'DOCKER_CONFIG=/workspace/docker-config'
-    args: ['-c', "docker push ${_DOCKER_REPO}:${BRANCH_NAME}-v$(cat IMAGE_TAG)-g${SHORT_SHA}"]
+    args: ['-c', "docker push $_DOCKER_REPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA"]
 
   # Get image id
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     env:
       - 'DOCKER_CONFIG=/workspace/docker-config'
-    args: ['-c', "docker inspect --format='{{index .RepoDigests 0}}' ${_DOCKER_REPO}:${BRANCH_NAME}-v$(cat IMAGE_TAG)-g${SHORT_SHA} > DIGEST" ]
+    args: ['-c', "docker inspect --format='{{index .RepoDigests 0' $_DOCKER_REPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA > DIGEST" ]
 
   # Capture new component version in DeployHub
   - name: 'quay.io/deployhub/compupdate'
@@ -50,20 +50,20 @@ steps:
       "--appname", "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale", 
       "--appversion", "1.2.9.1", 
       "--compname", "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice",
-      "--compvariant", "${BRANCH_NAME}", 
-      "--compversion", "v0.1.1-4-g${SHORT_SHA}", 
+      "--compvariant", "$BRANCH_NAME", 
+      "--compversion", "v0.1.1-4-g$SHORT_SHA", 
       "--docker", 
-      "--compattr", "GitCommit:${SHORT_SHA}", 
-      "--compattr", "GitUrl:${_GIT_URL}", 
-      "--compattr", "GitRepo:${REPO_NAME}", 
-      "--compattr", "GitTag:${TAG_NAME}", 
-      "--compattr", "GitBranch:${BRANCH_NAME}", 
+      "--compattr", "GitCommit:$SHORT_SHA", 
+      "--compattr", "GitUrl:$_GIT_URL", 
+      "--compattr", "GitRepo:$REPO_NAME", 
+      "--compattr", "GitTag:$TAG_NAME", 
+      "--compattr", "GitBranch:$BRANCH_NAME", 
       "--compattr", "Chart:cartservice",
       "--compattr", "DockerSha:@DIGEST",
       "--compattr", "DockerBuildDate:@BLDDATE",
       "--compattr", "DockerRepo:quay.io/hipsterstore/cartservice",
-      "--compattr", "BuildId:${BUILD_ID}",
-      "--compattr", "BuildUrl:https://console.cloud.google.com/cloud-build/builds/${BUILD_ID}/project=${PROJECT_ID}"]
+      "--compattr", "BuildId:$BUILD_ID",
+      "--compattr", "BuildUrl:https://console.cloud.google.com/cloud-build/builds/$BUILD_ID/project=$PROJECT_ID"]
 
 secrets:
 - kmsKeyName: projects/eighth-physics-169321/locations/global/keyRings/cli/cryptoKeys/quay
