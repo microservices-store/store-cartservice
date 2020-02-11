@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ include "cartservice.name" . }}
+spec:
+  selector:
+    matchLabels:
+      app:  {{ include "cartservice.name" . }}
+  template:
+    metadata:
+      labels:
+        app:  {{ include "cartservice.name" . }}
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: {{ include "cartservice.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }} 
+          ports:
+            - containerPort: 7070
+          env:
+            - name: REDIS_ADDR
+              value: "redis-cart:6379"
+            - name: PORT
+              value: "7070"
+            - name: LISTEN_ADDR
+              value: "0.0.0.0"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 128Mi
+          readinessProbe:
+            initialDelaySeconds: 15
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:7070"]
+          livenessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            exec:
+              command: ["/bin/grpc_health_probe", "-addr=:7070"]
