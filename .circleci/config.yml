@@ -44,7 +44,7 @@ workflows:
   on-commit:
     jobs:
       - build-push
-      - dh-update
+      - dh-update:
           requires: 
             - build-push
 
