@@ -7,8 +7,9 @@ orbs:
 
 jobs:
   build-push-dh-update:
+    executor: docker/docker
     steps:
-      - setup_remote_docker
+      - setup_remote_docker 
       - checkout
       - docker/check
       - docker/build:
