@@ -6,7 +6,7 @@ orbs:
   deployhub-orb: deployhub/deployhub-orb@1.55.0
 
 jobs:
-  build-push-dh-update:
+  build-push:
     executor: docker/docker
     steps:
       - setup_remote_docker
@@ -22,6 +22,9 @@ jobs:
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
+  dh-update:
+    executor: docker/docker
+    steps:
       - deployhub-orb/compupdate:
               application: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
               appversion: 1.2.9.1
@@ -36,10 +39,13 @@ jobs:
               giturl: ${CIRCLE_REPOSITORY_URL}
               gitcommit: ${CIRCLE_SHA1}
               buildid: ${CIRCLE_BUILD_URL}
-              buildnumber: ${CIRCLE_BUILD_NUM}
-  
+              buildnumber: ${CIRCLE_BUILD_NUM}  
 workflows:
   on-commit:
     jobs:
-      - build-push-dh-update
+      - build-push
+      - dh-update
+          requires: 
+            - build-push
+
       
