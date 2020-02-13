@@ -1,0 +1,9 @@
+[Component]
+    Name = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice"
+    Version = "1.2.2"
+    ChartName = "chart/cartservice"
+    DockerRepo = "quay.io/hipsterstore/cartservice"
+    GitUrl = "https://github.com/ortelius/store-cartservice"
+    Applications = [
+        { AppName = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale", AppVersion = "1.2.9.1"}
+    ]
