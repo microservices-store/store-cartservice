@@ -5,7 +5,7 @@ steps:
   # Save IMAGE_TAG
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', 'ls -la;. ./dhvars.sh;ls -A1 | xargs rm -rf;git clone $$COMPONENT_GITURL .']
+    args: ['-c', 'pwd;ls -la;. ./dhvars.sh;ls -A1 | xargs rm -rf;git clone $$COMPONENT_GITURL .']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
     args: ['-c', '. ./dhvars.sh;git checkout "$TAG_NAME" 2>/dev/null || git checkout "$BRANCH_NAME"']
