@@ -5,13 +5,13 @@ steps:
   # Save IMAGE_TAG
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ['-c', '. ./dhvars.sh;ls -A1 | xargs rm -rf;git clone $COMPONENT_GITURL .']
+    args: ['-c', '. ./dhvars.sh;ls -A1 | xargs rm -rf;git clone $$COMPONENT_GITURL .']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
     args: ['-c', '. ./dhvars.sh;git checkout "$TAG_NAME" 2>/dev/null || git checkout "$BRANCH_NAME"']
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
-    args: ["-c", ". ./dhvars.sh;echo $COMPONENT_VERSION.$(git rev-list --count $BRANCH_NAME) > IMAGE_TAG"]
+    args: ["-c", ". ./dhvars.sh;echo $$COMPONENT_VERSION.$(git rev-list --count $BRANCH_NAME) > IMAGE_TAG"]
   # Save BLDDATE    
   - name: gcr.io/cloud-builders/docker
     entrypoint: 'bash'
@@ -19,7 +19,7 @@ steps:
   # Build the image and save details as part of the LABEL
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: ["-c", ". ./dhvars.sh;docker build --tag $COMPONENT_DOCKERREPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA --build-arg BLDDATE=$(cat BLDDATE) --build-arg REPO_NAME=$REPO_NAME --build-arg COMMIT_SHA=$COMMIT_SHA --build-arg SHORT_SHA=$SHORT_SHA --build-arg PROJECT_ID=$PROJECT_ID --build-arg BUILD_ID=$BUILD_ID --build-arg BRANCH_NAME=$BRANCH_NAME --build-arg TAG_NAME=$TAG_NAME --build-arg REVISION_ID=$REVISION_ID ."]
+    args: ["-c", ". ./dhvars.sh;docker build --tag $$COMPONENT_DOCKERREPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA --build-arg BLDDATE=$(cat BLDDATE) --build-arg REPO_NAME=$REPO_NAME --build-arg COMMIT_SHA=$COMMIT_SHA --build-arg SHORT_SHA=$SHORT_SHA --build-arg PROJECT_ID=$PROJECT_ID --build-arg BUILD_ID=$BUILD_ID --build-arg BRANCH_NAME=$BRANCH_NAME --build-arg TAG_NAME=$TAG_NAME --build-arg REVISION_ID=$REVISION_ID ."]
     
   # Login to Quay for push.
   # PASSWORD is decrypted before this step runs.
@@ -36,20 +36,20 @@ steps:
     entrypoint: 'bash'
     env:
       - 'DOCKER_CONFIG=/workspace/docker-config'
-    args: ['-c', ". ./dhvars.sh;docker push $COMPONENT_DOCKERREPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA"]
+    args: ['-c', ". ./dhvars.sh;docker push $$COMPONENT_DOCKERREPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA"]
 
   # Get image id
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     env:
       - 'DOCKER_CONFIG=/workspace/docker-config'
-    args: ['-c', ". ./dhvars.sh;docker inspect --format='{{index .RepoDigests 0}}' $COMPONENT_DOCKERREPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA > DIGEST" ]
+    args: ['-c', ". ./dhvars.sh;docker inspect --format='{{index .RepoDigests 0}}' $$COMPONENT_DOCKERREPO:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA > DIGEST" ]
 
   # Capture new component version in DeployHub
   - name: 'quay.io/deployhub/compupdate'
     entrypoint: 'bash'
     secretEnv: ['DHUSER', 'DHPASS']
-    args: ['-c', '. ./dhvars.sh;dh updatecomp --dhurl https://console.deployhub.com --appname "$COMPONENT_APPNAME_1" --appversion "$COMPONENT_APPVERS_1" --compname "$COMPONENT_NAME" --compvariant $BRANCH_NAME --compversion v$(cat IMAGE_TAG)-g$SHORT_SHA --docker --compattr "GitCommit:$SHORT_SHA" --compattr "GitUrl:$COMPONENT_GITURL" --compattr "GitRepo:$REPO_NAME" --compattr "GitTag:$TAG_NAME" --compattr "GitBranch:$BRANCH_NAME" --compattr "Chart:$COMPONENT_CHARTNAME" --compattr "DockerSha:@DIGEST" --compattr "DockerBuildDate:@BLDDATE" --compattr "DockerRepo:$COMPONENT_DOCKERREPO" --compattr "BuildId:$BUILD_ID" --compattr "BuildUrl:https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=$PROJECT_ID" --compattr "CustomAction:GLOBAL.HelmChart" --compattr "DockerTag:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA" --compattr "ComponentType:Application File"']
+    args: ['-c', '. ./dhvars.sh;dh updatecomp --dhurl https://console.deployhub.com --appname "$$COMPONENT_APPNAME_1" --appversion "$$COMPONENT_APPVERS_1" --compname "$$COMPONENT_NAME" --compvariant $BRANCH_NAME --compversion v$(cat IMAGE_TAG)-g$SHORT_SHA --docker --compattr "GitCommit:$SHORT_SHA" --compattr "GitUrl:$$COMPONENT_GITURL" --compattr "GitRepo:$REPO_NAME" --compattr "GitTag:$TAG_NAME" --compattr "GitBranch:$BRANCH_NAME" --compattr "Chart:$$COMPONENT_CHARTNAME" --compattr "DockerSha:@DIGEST" --compattr "DockerBuildDate:@BLDDATE" --compattr "DockerRepo:$$COMPONENT_DOCKERREPO" --compattr "BuildId:$BUILD_ID" --compattr "BuildUrl:https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=$PROJECT_ID" --compattr "CustomAction:GLOBAL.HelmChart" --compattr "DockerTag:$BRANCH_NAME-v$(cat IMAGE_TAG)-g$SHORT_SHA" --compattr "ComponentType:Application File"']
  
 secrets:
 - kmsKeyName: projects/eighth-physics-169321/locations/global/keyRings/cli/cryptoKeys/quay
