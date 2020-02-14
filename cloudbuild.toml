@@ -5,5 +5,5 @@
     DockerRepo = "quay.io/hipsterstore/cartservice"
     GitUrl = "https://github.com/ortelius/store-cartservice"
     Applications = [
-        { AppName = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale", AppVersion = "1.2.9.1"}
+        "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale;1.2.9.1"
     ]
