@@ -24,10 +24,10 @@ jobs:
           command: >
             docker run quay.io/deployhub/compupdate:latest
             compupdate
-            --dhuser ${DH_USERID}
-            --dhpass ${DH_PASSWORD}
-            --dhurl ${DH_SERVERURL}
-            --appname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
+            --dhuser "${DH_USERID}"
+            --dhpass "${DH_PASSWORD}"
+            --dhurl "${DH_SERVERURL}"
+            --appname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale"
             --appversion "1.2.9.1"
             --compname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice"
             --compversion "v0.1.1-4-g$CIRCLE_SHA1"
