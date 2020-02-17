@@ -4,6 +4,7 @@
     ChartName = "chart/cartservice"
     DockerRepo = "quay.io/hipsterstore/cartservice"
     GitUrl = "https://github.com/ortelius/store-cartservice"
+    HelmChart = "GLOBAL.HelmChart"
     Applications = [
         "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale;1.2.9.1"
     ]
