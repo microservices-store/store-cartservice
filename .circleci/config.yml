@@ -21,26 +21,26 @@ jobs:
           command: |
             echo "Digest is: $(</workspaces/digest.txt)"
       - run:
-        command: |
-          docker run quay.io/deployhub/compupdate:latest  
-          compupdate
-          --dhuser ${DH_USERID}
-          --dhpass ${DH_PASSWORD}
-          --dhurl ${DH_SERVERURL}
-          --appname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
-          --appversion "1.2.9.1"
-          --compname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice"
-          --compversion "v0.1.1-4-g$CIRCLE_SHA1"
-          --docker
-          --compattr "GitCommit:${CIRCLE_SHA1}" 
-          --compattr "GitUrl:${CIRCLE_REPOSITORY_URL}" 
-          --compattr "GitRepo:${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" 
-          --compattr "Chart:helm/cartservice"
-          --compattr "DockerSha:$(</workspaces/digest.txt)"
-          --compattr "DockerBuildDate:$(date)"
-          --compattr "DockerRepo:deployhub/store-cartservice"
-          --compattr "BuildId:${CIRCLE_BUILD_URL}"
-          --compattr "BuildNumber:${CIRCLE_BUILD_NUM}"
+          command: |
+            docker run quay.io/deployhub/compupdate:latest  
+            compupdate
+            --dhuser ${DH_USERID}
+            --dhpass ${DH_PASSWORD}
+            --dhurl ${DH_SERVERURL}
+            --appname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
+            --appversion "1.2.9.1"
+            --compname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice"
+            --compversion "v0.1.1-4-g$CIRCLE_SHA1"
+            --docker
+            --compattr "GitCommit:${CIRCLE_SHA1}" 
+            --compattr "GitUrl:${CIRCLE_REPOSITORY_URL}" 
+            --compattr "GitRepo:${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" 
+            --compattr "Chart:helm/cartservice"
+            --compattr "DockerSha:$(</workspaces/digest.txt)"
+            --compattr "DockerBuildDate:$(date)"
+            --compattr "DockerRepo:deployhub/store-cartservice"
+            --compattr "BuildId:${CIRCLE_BUILD_URL}"
+            --compattr "BuildNumber:${CIRCLE_BUILD_NUM}"
   
 workflows:
   on-commit:
