@@ -22,7 +22,8 @@ jobs:
             echo "Digest is: $(</tmp/digest.txt)"
       - run:
           command: |
-            docker run quay.io/deployhub/compupdate:latest  
+            docker run quay.io/deployhub/compupdate:latest
+            /usr/bin/dh  
             compupdate
             --dhuser ${DH_USERID}
             --dhpass ${DH_PASSWORD}
