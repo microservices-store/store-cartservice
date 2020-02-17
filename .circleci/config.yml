@@ -9,7 +9,6 @@ jobs:
   build-push-dh-update:
     machine: true
     steps:
-      - setup_remote_docker 
       - checkout
       - docker/check
       - docker/build:
