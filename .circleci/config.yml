@@ -23,7 +23,7 @@ jobs:
       - run:
           command: >
             docker run quay.io/deployhub/compupdate:latest
-            compupdate
+            updatecomp
             --dhuser "${DH_USERID}"
             --dhpass "${DH_PASSWORD}"
             --dhurl "${DH_SERVERURL}"
