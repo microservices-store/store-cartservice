@@ -3,11 +3,13 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
+  deployhub-orb: deployhub/deployhub-orb@1.56.0
 
 jobs:
   build-push-dh-update:
-    machine: true
+    executor: docker/docker
     steps:
+      - setup_remote_docker 
       - checkout
       - docker/check
       - docker/build:
@@ -20,27 +22,21 @@ jobs:
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
-      - run:
-          command: >
-            docker run quay.io/deployhub/compupdate:latest
-            updatecomp
-            --dhuser "${DH_USERID}"
-            --dhpass "${DH_PASSWORD}"
-            --dhurl "${DH_SERVERURL}"
-            --appname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale"
-            --appversion "1.2.9.1"
-            --compname "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice"
-            --compversion "v0.1.1-4-g$CIRCLE_SHA1"
-            --docker
-            --compattr "GitCommit:${CIRCLE_SHA1}" 
-            --compattr "GitUrl:${CIRCLE_REPOSITORY_URL}" 
-            --compattr "GitRepo:${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" 
-            --compattr "Chart:helm/cartservice"
-            --compattr "DockerSha:$(</tmp/digest.txt)"
-            --compattr "DockerBuildDate:$(date)"
-            --compattr "DockerRepo:deployhub/store-cartservice"
-            --compattr "BuildId:${CIRCLE_BUILD_URL}"
-            --compattr "BuildNumber:${CIRCLE_BUILD_NUM}"
+      - deployhub-orb/compupdate:
+              application: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
+              appversion: 1.2.9.1
+              compname: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice
+              compversion: v0.1.1-4-g$CIRCLE_SHA1
+              comptype: --docker
+              helmchart: helm/cartservice
+              dockersha: $(</tmp/digest.txt)
+              dockerrepo: deployhub/store-cartservice
+              builddate:  $(date)
+              gitrepo: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+              giturl: ${CIRCLE_REPOSITORY_URL}
+              gitcommit: ${CIRCLE_SHA1}
+              buildid: ${CIRCLE_BUILD_URL}
+              buildnumber: ${CIRCLE_BUILD_NUM}
   
 workflows:
   on-commit:
