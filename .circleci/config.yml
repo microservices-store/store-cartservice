@@ -14,12 +14,12 @@ jobs:
           image: deployhub/store-cartservice
           tag: latest
       - docker/push:
-          digest-path: /workspaces/digest.txt
+          digest-path: /tmp/digest.txt
           image: deployhub/store-cartservice
           tag: latest
       - run:
           command: |
-            echo "Digest is: $(</workspaces/digest.txt)"
+            echo "Digest is: $(</tmp/digest.txt)"
       - run:
           command: |
             docker run quay.io/deployhub/compupdate:latest  
@@ -36,7 +36,7 @@ jobs:
             --compattr "GitUrl:${CIRCLE_REPOSITORY_URL}" 
             --compattr "GitRepo:${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" 
             --compattr "Chart:helm/cartservice"
-            --compattr "DockerSha:$(</workspaces/digest.txt)"
+            --compattr "DockerSha:$(</tmp/digest.txt)"
             --compattr "DockerBuildDate:$(date)"
             --compattr "DockerRepo:deployhub/store-cartservice"
             --compattr "BuildId:${CIRCLE_BUILD_URL}"
