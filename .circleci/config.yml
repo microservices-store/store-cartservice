@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.59.0
+  deployhub-orb: deployhub/deployhub-orb@1.60.0
 
 jobs:
   build-push-dh-update:
@@ -14,10 +14,10 @@ jobs:
       - docker/check
       - deployhub-orb/envscript:
           envvars: /home/circleci/project/cloudbuild.toml
-          envvars_sh: ${BASH_ENV}
+          envvars_sh: $BASH_ENV
       - run:
           command: |
-            pwd;ls -la;echo export IMAGE_TAG=\"$BRANCH_NAME-v$COMPONENT_VERSION.$(git rev-list --count $BRANCH_NAME)-g$SHORT_SHA\" >> $BASH_ENV     
+            cat /home/circleci/project/cloudbuild.toml;echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV     
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
@@ -38,11 +38,11 @@ jobs:
           dockersha: $(</tmp/digest.txt)
           dockerrepo: $COMPONENT_DOCKERREPO
           builddate:  $(date)
-          gitrepo: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-          giturl: ${CIRCLE_REPOSITORY_URL}
-          gitcommit: ${CIRCLE_SHA1}
-          buildid: ${CIRCLE_BUILD_URL}
-          buildnumber: ${CIRCLE_BUILD_NUM}
+          gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          giturl: $CIRCLE_REPOSITORY_URL
+          gitcommit: $CIRCLE_SHA1
+          buildid: $CIRCLE_BUILD_URL
+          buildnumber: $CIRCLE_BUILD_NUM
   
 workflows:
   on-commit:
