@@ -14,7 +14,6 @@ jobs:
       - docker/check
       - run:
           command: |
-            docker create -v /home/circleci/project --name envscript$CIRCLE_BUILD_NUM quay.io/deployhub/compupdate:latest /bin/true;
             env;
             ls -la;
             cat $BASH_ENV;
