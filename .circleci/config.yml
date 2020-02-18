@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.62.0
+  deployhub-orb: deployhub/deployhub-orb@1.56.0
 
 jobs:
   build-push-dh-update:
@@ -13,11 +13,11 @@ jobs:
       - checkout
       - docker/check
       - deployhub-orb/envscript:
-          envvars: /home/circleci/project/cloudbuild.toml
-          envvars_sh: $BASH_ENV
+        envvars: cloudbuild.toml
+        envvars_sh: $BASH_ENV
       - run:
-          command: |
-            echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV    
+        command: |
+          cat cloudbuild.toml;echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV;cat $BASH_ENV;  
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
@@ -27,22 +27,22 @@ jobs:
           tag: latest
       - run:
           command: |
-            env | sort && echo "Digest is: $(</tmp/digest.txt)"
+            env && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/microservice_version_update:
-          application: "@APPLIST"
-          appversion: ""
-          compname: $COMPONENT_NAME
-          compversion: $IMAGE_TAG
-          comptype: --docker
-          helmchart: $COMPONENT_CHARTNAME
-          dockersha: $(</tmp/digest.txt)
-          dockerrepo: $COMPONENT_DOCKERREPO
-          builddate:  $(date)
-          gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          giturl: $CIRCLE_REPOSITORY_URL
-          gitcommit: $CIRCLE_SHA1
-          buildid: $CIRCLE_BUILD_URL
-          buildnumber: $CIRCLE_BUILD_NUM
+              application: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
+              appversion: 1.2.9.1
+              compname: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice
+              compversion: v0.1.1-4-g$CIRCLE_SHA1
+              comptype: --docker
+              helmchart: helm/cartservice
+              dockersha: $(</tmp/digest.txt)
+              dockerrepo: deployhub/store-cartservice
+              builddate:  $(date)
+              gitrepo: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+              giturl: ${CIRCLE_REPOSITORY_URL}
+              gitcommit: ${CIRCLE_SHA1}
+              buildid: ${CIRCLE_BUILD_URL}
+              buildnumber: ${CIRCLE_BUILD_NUM}
   
 workflows:
   on-commit:
