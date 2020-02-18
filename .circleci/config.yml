@@ -9,16 +9,14 @@ jobs:
   build-push-dh-update:
     executor: docker/docker
     steps:
-      - setup_remote_docker 
       - checkout
-      - docker/check
       - run: 
           name: "Setup custom environment variables"
           command: |
             echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV
       - run:
           command: |
-            cat $BASH_ENV; 
+            env 
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
