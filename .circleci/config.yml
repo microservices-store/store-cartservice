@@ -29,7 +29,7 @@ jobs:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/compupdate:
-          application: @APPLIST
+          application: "@APPLIST"
           compname: $COMPONENT_NAME
           compversion: $IMAGE_TAG
           comptype: --docker
