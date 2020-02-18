@@ -15,6 +15,8 @@ jobs:
       - run:
           command: |
             docker create -v /home/circleci/project --name envscript quay.io/deployhub/compupdate:latest /bin/true;
+            env;
+            cat $BASH_ENV;
       - run:
           command: |
             echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV;cat $BASH_ENV;  
