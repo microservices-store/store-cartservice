@@ -12,12 +12,17 @@ jobs:
       - setup_remote_docker 
       - checkout
       - docker/check
-      - deployhub-orb/envscript:
-          envvars: /home/circleci/project/cloudbuild.toml
-          envvars_sh: $BASH_ENV
       - run:
           command: |
-            cat cloudbuild.toml;echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV;cat $BASH_ENV;  
+            # create a dummy container which will hold a volume with config
+            docker create -v /home/circleci/project --name envscript quay.io/deployhub/compupdate:latest /bin/true
+            docker cp cloudbuild.toml envscript:/home/circleci/project/envvars.toml
+            docker cp $BASH_ENV envscript:/home/circleci/project/bash_env.sh
+            docker run --volumes-from envscript /usr/bin/dh envscript --envvars /home/circleci/project/envvars.toml --envvars_sh /home/circleci/project/bash_env.sh
+            docker cp envscript:/home/circleci/project/bash_env.sh $BASH_ENV  
+      - run:
+          command: |
+            echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV;cat $BASH_ENV;  
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
