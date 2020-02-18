@@ -12,11 +12,8 @@ jobs:
       - setup_remote_docker 
       - checkout
       - docker/check
-      - run:
-          command: |
-            cp cloudbuild.toml /tmp
       - deployhub-orb/envscript:
-          envvars: /tmp/cloudbuild.toml
+          envvars: cloudbuild.toml
           envvars_sh: $BASH_ENV
       - run:
           command: |
