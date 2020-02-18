@@ -16,8 +16,8 @@ jobs:
         envvars: cloudbuild.toml
         envvars_sh: $BASH_ENV
       - run:
-        command: |
-          cat cloudbuild.toml;echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV;cat $BASH_ENV;  
+          command: |
+            cat cloudbuild.toml;echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV;cat $BASH_ENV;  
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
