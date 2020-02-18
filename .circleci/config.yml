@@ -13,11 +13,11 @@ jobs:
       - checkout
       - docker/check
       - deployhub-orb/envscript:
-          envvars: /home/circleci/project/cloudbuild.toml
+          envvars: cloudbuild.toml
           envvars_sh: ${BASH_ENV}
       - run:
           command: |
-            cd /home/circleci/project;echo export IMAGE_TAG=\"$BRANCH_NAME-v$$COMPONENT_VERSION.$(git rev-list --count $BRANCH_NAME)-g$SHORT_SHA\" >> $BASH_ENV     
+            pwd;ls -lR;echo export IMAGE_TAG=\"$BRANCH_NAME-v$$COMPONENT_VERSION.$(git rev-list --count $BRANCH_NAME)-g$SHORT_SHA\" >> $BASH_ENV     
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
