@@ -32,7 +32,7 @@ jobs:
           tag: latest
       - run:
           command: |
-            env && echo "Digest is: $(</tmp/digest.txt)"
+            env | sort && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/microservice_version_update:
               application: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
               appversion: 1.2.9.1
