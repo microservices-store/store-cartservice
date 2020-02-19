@@ -45,8 +45,6 @@ jobs:
               gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
               giturl: $CIRCLE_REPOSITORY_URL
               gitcommit: $CIRCLE_SHA1
-              gitbranch: $CIRCLE_BRANCH
-              gittag: "$CIRCLE_TAG"
               buildid: $CIRCLE_BUILD_URL
               buildnumber: $CIRCLE_BUILD_NUM
   
