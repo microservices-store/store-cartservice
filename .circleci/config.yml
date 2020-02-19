@@ -18,11 +18,7 @@ jobs:
             docker cp cloudbuild.toml envscript:/home/circleci/project/envvars.toml;
             docker run --volumes-from envscript quay.io/deployhub/compupdate:latest envscript --envvars /home/circleci/project/envvars.toml --envvars_sh /home/circleci/project/bash_env.sh;
             docker cp envscript:/home/circleci/project/bash_env.sh /tmp/bash_env.sh;
-            docker cp envscript:/home/circleci/project/APPLIST /home/circleci/project/APPLIST;
             cat /tmp/bash_env.sh >> $BASH_ENV;
-            cat /home/circleci/project/APPLIST;
-            echo "######";
-            cat APPLIST
       - run:
           command: |
             echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-8)\" >> $BASH_ENV  
@@ -37,7 +33,7 @@ jobs:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/microservice_version_update:
-              application: "@APPLIST"
+              application: $COMPONENT_APPLICATIONS
               appversion: ""
               compname: $COMPONENT_NAME
               compversion: $IMAGE_TAG
@@ -49,6 +45,8 @@ jobs:
               gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
               giturl: $CIRCLE_REPOSITORY_URL
               gitcommit: $CIRCLE_SHA1
+              gitbranch: $CIRCLE_BRANCH
+              gittag: "$CIRCLE_TAG"
               buildid: $CIRCLE_BUILD_URL
               buildnumber: $CIRCLE_BUILD_NUM
   
