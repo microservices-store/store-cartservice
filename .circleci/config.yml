@@ -17,7 +17,6 @@ jobs:
             docker create -v /home/circleci/project --name envscript quay.io/deployhub/compupdate:latest /bin/true;
             docker cp cloudbuild.toml envscript:/home/circleci/project/envvars.toml;
             docker run --volumes-from envscript quay.io/deployhub/compupdate:latest envscript --envvars /home/circleci/project/envvars.toml --envvars_sh /home/circleci/project/bash_env.sh;
-            docker cp envscript:/home/circleci/project/APPLIST APPLIST;
             docker cp envscript:/home/circleci/project/bash_env.sh /tmp/bash_env.sh;
             cat /tmp/bash_env.sh >> $BASH_ENV
       - run:
