@@ -18,10 +18,11 @@ jobs:
             docker cp cloudbuild.toml envscript:/home/circleci/project/envvars.toml;
             docker run --volumes-from envscript quay.io/deployhub/compupdate:latest envscript --envvars /home/circleci/project/envvars.toml --envvars_sh /home/circleci/project/bash_env.sh;
             docker cp envscript:/home/circleci/project/bash_env.sh /tmp/bash_env.sh;
+            docker cp envscript:/home/circleci/project/APPLIST /home/circleci/project/APPLIST
             cat /tmp/bash_env.sh >> $BASH_ENV
       - run:
           command: |
-            echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$CIRCLE_SHA1\" >> $BASH_ENV  
+            echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-8)\" >> $BASH_ENV  
       - docker/build:
           image: deployhub/store-cartservice
           tag: latest
@@ -33,20 +34,20 @@ jobs:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/microservice_version_update:
-              application: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale
-              appversion: 1.2.9.1
-              compname: GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice
-              compversion: v0.1.1-4-g$CIRCLE_SHA1
+              application: "@APPLIST"
+              appversion: ""
+              compname: $COMPONENT_NAME
+              compversion: $IMAGE_TAG
               comptype: --docker
-              helmchart: helm/cartservice
+              helmchart: $COMPONENT_HELMCHART
               dockersha: $(</tmp/digest.txt)
-              dockerrepo: deployhub/store-cartservice
+              dockerrepo: $COMPONENT_DOCKERREPO
               builddate:  $(date)
-              gitrepo: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-              giturl: ${CIRCLE_REPOSITORY_URL}
-              gitcommit: ${CIRCLE_SHA1}
-              buildid: ${CIRCLE_BUILD_URL}
-              buildnumber: ${CIRCLE_BUILD_NUM}
+              gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+              giturl: $CIRCLE_REPOSITORY_URL
+              gitcommit: $CIRCLE_SHA1
+              buildid: $CIRCLE_BUILD_URL
+              buildnumber: $CIRCLE_BUILD_NUM
   
 workflows:
   on-commit:
