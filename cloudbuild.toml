@@ -1,15 +1,9 @@
 [Component]
-ChartName = 'chart/cartservice'
-DockerRepo = 'quay.io/hipsterstore/cartservice'
-GitUrl = 'https://github.com/ortelius/store-cartservice'
-HelmChart = 'GLOBAL.HelmChart'
-
-[[Component.Assignment]]
-Application = 'GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale;1.2.9.1'
-Name = 'GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice'
-Version = '1.2.2'
-
-[[Component.Components]]
-Application = 'GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale;1.2.9.12'
-Name = 'GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice2'
-Version = '1.2.22'
+    Components = [
+        { Name = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice", Version = "1.2.2", Application = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale;1.2.9.1"},
+        { Name = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.cartservice2", Version = "1.2.22", Application = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;July 4th Sale;1.2.9.12"}
+    ]    
+    ChartName = "chart/cartservice"
+    DockerRepo = "quay.io/hipsterstore/cartservice"
+    GitUrl = "https://github.com/ortelius/store-cartservice"
+    HelmChart = "GLOBAL.HelmChart"
