@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.65.0
+  deployhub-orb: deployhub/deployhub-orb@1.66.0
 
 jobs:
   build-push-dh-update:
@@ -12,13 +12,9 @@ jobs:
       - setup_remote_docker 
       - checkout
       - docker/check
-      - run:
-          command: |
-            docker create -v /home/circleci/project --name envscript quay.io/deployhub/compupdate:latest /bin/true;
-            docker cp cloudbuild.toml envscript:/home/circleci/project/envvars.toml;
-            docker run --volumes-from envscript quay.io/deployhub/compupdate:latest envscript --envvars /home/circleci/project/envvars.toml --envvars_sh /home/circleci/project/bash_env.sh;
-            docker cp envscript:/home/circleci/project/bash_env.sh /tmp/bash_env.sh;
-            cat /tmp/bash_env.sh >> $BASH_ENV;
+      - deployhub-orb/envscript:
+          envvars: cloudbuild.toml
+          envvars_sh: $BASH_ENV
       - run:
           command: |
             echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-8)\" >> $BASH_ENV  
@@ -34,7 +30,6 @@ jobs:
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/microservice_version_update:
               application: $COMPONENT_APPLICATIONS
-              appversion: ""
               compname: $COMPONENT_NAME
               compversion: $IMAGE_TAG
               comptype: --docker
