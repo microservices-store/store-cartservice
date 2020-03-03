@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.68.0
+  deployhub-orb: deployhub/deployhub-orb@1.69.0
 
 jobs:
   build-push-dh-update:
@@ -42,7 +42,8 @@ jobs:
               gitcommit: $CIRCLE_SHA1
               gitbranch: $CIRCLE_BRANCH
               gittag: "$CIRCLE_TAG"
-              buildid: $CIRCLE_BUILD_URL
+              buildid: $CIRCLE_BUILD_NUM
+              buildurl: $CIRCLE_BUILD_URL
               buildnumber: $CIRCLE_BUILD_NUM
               customaction: $COMPONENT_CUSTOMACTION
               preaction: ""
