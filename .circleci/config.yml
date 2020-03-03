@@ -44,6 +44,9 @@ jobs:
               gittag: "$CIRCLE_TAG"
               buildid: $CIRCLE_BUILD_URL
               buildnumber: $CIRCLE_BUILD_NUM
+              customaction: $COMPONENT_CUSTOMACTION
+              preaction: ""
+              postaction: ""
   
 workflows:
   on-commit:
