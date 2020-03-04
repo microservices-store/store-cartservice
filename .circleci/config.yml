@@ -24,7 +24,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: deployhub/store-cartservice
-          tag: latest
+          tag: $IMAGE_TAG
       - run:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
