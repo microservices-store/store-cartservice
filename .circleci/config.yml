@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.69.0
+  deployhub-orb: deployhub/deployhub-orb@1.70.0
 
 jobs:
   build-push-dh-update:
@@ -36,6 +36,7 @@ jobs:
               helmchart: $COMPONENT_HELMCHART
               dockersha: $(</tmp/digest.txt)
               dockerrepo: $COMPONENT_DOCKERREPO
+              dockertag: $IMAGE_TAG
               builddate:  $(date)
               gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
               giturl: $CIRCLE_REPOSITORY_URL
