@@ -4,6 +4,6 @@
     ]    
     Version = "1.2.2"
     HelmChart = "chart/cartservice"
-    DockerRepo = "quay.io/hipsterstore/cartservice"
+    DockerRepo = "deployhub/store-cartservice"
     GitUrl = "https://github.com/ortelius/store-cartservice"
     CustomAction = "GLOBAL.HelmChart"
