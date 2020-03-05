@@ -18,13 +18,14 @@ jobs:
       - run:
           command: |
             echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-7)\" >> $BASH_ENV  
+      - run:
+          name: Login to Quay
+          command: docker login -u=$QUAY_USERNAME -p=$QUAY_PASSWORD quay.io
       - docker/build:
           image: quay.io/hipsterstore/cartservice
-          registry: quay.io
           tag: $IMAGE_TAG
       - docker/push:
           image: quay.io/hipsterstore/cartservice
-          registry: quay.io
           digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
       - run:
