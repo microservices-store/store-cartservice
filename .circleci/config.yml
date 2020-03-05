@@ -22,7 +22,8 @@ jobs:
           name: Login to Quay
           command: docker login -u=$QUAY_USERNAME -p=$QUAY_PASSWORD quay.io
       - docker/build:
-          image: quay.io/hipsterstore/cartservice
+          image: hipsterstore/cartservice
+          registry: quay.io
           tag: $IMAGE_TAG
       - docker/push:
           image: hipsterstore/cartservice
