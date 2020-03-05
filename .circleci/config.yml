@@ -19,12 +19,15 @@ jobs:
           command: |
             echo export IMAGE_TAG=\"$CIRCLE_BRANCH-v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-7)\" >> $BASH_ENV  
       - docker/build:
-          image: deployhub/store-cartservice
+          image: quay.io/hipsterstore/cartservice
           tag: $IMAGE_TAG
       - docker/push:
           digest-path: /tmp/digest.txt
-          image: deployhub/store-cartservice
+          image: quay.io/hipsterstore/cartservice
           tag: $IMAGE_TAG
+          auth:
+            username: $QUAY_USERNAME
+            password: $QUAY_PASSWORD
       - run:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
