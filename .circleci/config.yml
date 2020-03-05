@@ -22,12 +22,12 @@ jobs:
           image: quay.io/hipsterstore/cartservice
           tag: $IMAGE_TAG
       - docker/push:
-          - image: quay.io/hipsterstore/cartservice
-            auth:
-              username: $QUAY_USERNAME
-              password: $QUAY_PASSWORD
-            digest-path: /tmp/digest.txt
-            tag: $IMAGE_TAG
+          image: quay.io/hipsterstore/cartservice
+          auth:
+            username: $QUAY_USERNAME
+            password: $QUAY_PASSWORD
+          digest-path: /tmp/digest.txt
+          tag: $IMAGE_TAG
       - run:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
