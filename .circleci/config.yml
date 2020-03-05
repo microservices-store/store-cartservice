@@ -25,7 +25,8 @@ jobs:
           image: quay.io/hipsterstore/cartservice
           tag: $IMAGE_TAG
       - docker/push:
-          image: quay.io/hipsterstore/cartservice
+          image: hipsterstore/cartservice
+          registry: quay.io
           digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
       - run:
