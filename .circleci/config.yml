@@ -38,7 +38,7 @@ jobs:
               compname: $COMPONENT_NAME
               compversion: $IMAGE_TAG
               comptype: --docker
-              helmchart: $COMPONENT_HELMCHART
+              helmchart: $COMPONENT_CHARTNAME
               dockersha: $(</tmp/digest.txt)
               dockerrepo: $COMPONENT_DOCKERREPO
               dockertag: $IMAGE_TAG
