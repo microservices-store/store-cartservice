@@ -1,6 +1,6 @@
 [Component]
     Components = [
-         { Name = "GLOBAL.Chasing Horses LLC.Vintage LLC.Purchase Processing.Cart Service.cartservice", Application = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Webstore;Labor Day Sale;1.2.10.0"}
+         { Name = "GLOBAL.Chasing Horses LLC.Vintage LLC.Purchase Processing.Cart Service.cartservice", Application = "GLOBAL.Chasing Horses LLC.Vintage LLC.Hipster Store.Hipster Store;Labor Day Sale;1_2_10_0"}
     ]    
     Version = "1.2.2"
     ChartName = "chart/cartservice"
