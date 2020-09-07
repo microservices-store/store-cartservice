@@ -8,13 +8,17 @@ orbs:
 jobs:
   build-push-dh-update:
     executor: docker/docker
+    environment: 
+      COMPONENT_NAME: GLOBAL.SF Tech.Online Store Company.Purchase Processing.Cart Service.cartservice
+      COMPONENT_VERSION: 1.2.2
+      COMPONENT_CHARTNAME: chart/cartservice
+      COMPONENT_CUSTOMACTION: GLOBAL.HelmChart
+      COMPONENT_DOCKERREPO: quay.io/hipsterstore/cartservice
+      COMPONENT_IMAGENAME: hipsterstore/cartservice
     steps:
       - setup_remote_docker 
       - checkout
       - docker/check
-      - deployhub-orb/envscript:
-          envvars: cloudbuild.toml
-          envvars_sh: $BASH_ENV
       - run:
           command: |
             echo export IMAGE_TAG=\"v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-7)\" >> $BASH_ENV  
@@ -22,11 +26,11 @@ jobs:
           name: Login to Quay
           command: docker login -u=$QUAY_USERNAME -p=$QUAY_PASSWORD quay.io
       - docker/build:
-          image: hipsterstore/cartservice
+          image: $COMPONENT_IMAGENAME
           registry: quay.io
           tag: $IMAGE_TAG
       - docker/push:
-          image: hipsterstore/cartservice
+          image: $COMPONENT_IMAGENAME
           registry: quay.io
           digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
@@ -53,11 +57,7 @@ jobs:
               buildnumber: $CIRCLE_BUILD_NUM
               customaction: $COMPONENT_CUSTOMACTION
               preaction: ""
-              postaction: ""
-      - deployhub-orb/deploy:
-          application: $COMPONENT_APPLICATION
-          appversion: latest
-          environment: $DH_DEPLOY_ENV     
+              postaction: "" 
 workflows:
   on-commit:
     jobs:
