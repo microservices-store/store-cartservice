@@ -16,7 +16,7 @@ jobs:
       COMPONENT_DOCKERREPO: quay.io/hipsterstore/cartservice
       COMPONENT_IMAGENAME: hipsterstore/cartservice
       SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
-      IMAGE_TAG=v$COMPONENT_VERSION.<< pipeline.number >>-g$SHORT_GIT_HASH
+      IMAGE_TAG: "v$COMPONENT_VERSION.<< pipeline.number >>-g$SHORT_GIT_HASH"
     steps:
       - setup_remote_docker 
       - checkout
