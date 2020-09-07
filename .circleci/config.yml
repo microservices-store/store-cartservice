@@ -15,13 +15,12 @@ jobs:
       COMPONENT_CUSTOMACTION: GLOBAL.HelmChart
       COMPONENT_DOCKERREPO: quay.io/hipsterstore/cartservice
       COMPONENT_IMAGENAME: hipsterstore/cartservice
+      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
+      IMAGE_TAG=v$COMPONENT_VERSION.<< pipeline.number >>-g$SHORT_GIT_HASH
     steps:
       - setup_remote_docker 
       - checkout
       - docker/check
-      - run:
-          command: |
-            echo export IMAGE_TAG=\"v$COMPONENT_VERSION.$(git rev-list --count $CIRCLE_BRANCH)-g$(echo $CIRCLE_SHA1 | cut -b 1-7)\" >> $BASH_ENV  
       - run:
           name: Login to Quay
           command: docker login -u=$QUAY_USERNAME -p=$QUAY_PASSWORD quay.io
