@@ -22,7 +22,7 @@ jobs:
       - docker/check
       - run:
           name: Image tag
-          command: echo "IMAGE_TAG=v${COMPONENT_VERSION}.<< pipeline.number >>-g${SHORT_GIT_HASH}" >> $BASH_ENV
+          command: echo export IMAGE_TAG=\"v${COMPONENT_VERSION}.<< pipeline.number >>-g${SHORT_GIT_HASH}\" >> $BASH_ENV
       - run:
           name: Login to Quay
           command: docker login -u=$QUAY_USERNAME -p=$QUAY_PASSWORD quay.io
