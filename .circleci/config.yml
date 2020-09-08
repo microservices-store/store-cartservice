@@ -20,7 +20,7 @@ jobs:
       - setup_remote_docker 
       - checkout
       - docker/check:
-          registry: $DOCKER_REGISTRY
+          registry: quay.io
       - run:
           name: Image tag
           command: echo export IMAGE_TAG=\"v${COMPONENT_VERSION}.${CIRCLE_BUILD_NUM}-g${SHORT_GIT_HASH}\" >> $BASH_ENV
