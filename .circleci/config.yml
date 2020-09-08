@@ -31,6 +31,7 @@ jobs:
           image: $COMPONENT_IMAGENAME
           digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
+          registry: $DOCKER_REGISTRY
       - run:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
