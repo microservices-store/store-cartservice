@@ -25,13 +25,14 @@ jobs:
           name: Image tag
           command: echo export IMAGE_TAG=\"v${COMPONENT_VERSION}.${CIRCLE_BUILD_NUM}-g${SHORT_GIT_HASH}\" >> $BASH_ENV
       - docker/build:
+          registry: $DOCKER_REGISTRY
           image: $COMPONENT_IMAGENAME
           tag: $IMAGE_TAG
       - docker/push:
+          registry: $DOCKER_REGISTRY
           image: $COMPONENT_IMAGENAME
           digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
-          registry: $DOCKER_REGISTRY
       - run:
           command: |
             env | sort && echo "Digest is: $(</tmp/digest.txt)"
