@@ -16,12 +16,14 @@ jobs:
       COMPONENT_DOCKERREPO: quay.io/hipsterstore/cartservice
       COMPONENT_IMAGENAME: hipsterstore/cartservice
       SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
-      IMAGE_TAG: $(echo "v${COMPONENT_VERSION}.${CIRCLE_BUILD_NUM}-g`echo $CIRCLE_SHA1 | cut -c -7`")
     steps:
       - setup_remote_docker 
       - checkout
       - docker/check:
           registry: $DOCKER_REGISTRY
+      - run:
+          name: Image tag
+          command: echo export IMAGE_TAG=\"v${COMPONENT_VERSION}.${CIRCLE_BUILD_NUM}-g${SHORT_GIT_HASH}\" >> $BASH_ENV
       - docker/build:
           registry: $DOCKER_REGISTRY
           image: $COMPONENT_IMAGENAME
