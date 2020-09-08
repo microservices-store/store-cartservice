@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.74.0
+  deployhub-orb: deployhub/deployhub-orb@1.75.0
 
 jobs:
   build-push-dh-update:
@@ -54,7 +54,7 @@ jobs:
           customaction: $COMPONENT_CUSTOMACTION
           preaction: ""
           postaction: "" 
-      - deployhub-orb/deploy:
+      - deployhub-orb/deploy_component:
           compname: $COMPONENT_NAME
 workflows:
   on-commit:
