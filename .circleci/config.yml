@@ -33,30 +33,29 @@ jobs:
           image: $COMPONENT_IMAGENAME
           digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
-      - run:
-          command: |
-            env | sort && echo "Digest is: $(</tmp/digest.txt)"
       - deployhub-orb/microservice_version_update:
-              application: $COMPONENT_APPLICATION
-              compname: $COMPONENT_NAME
-              compversion: $IMAGE_TAG
-              comptype: --docker
-              helmchart: $COMPONENT_CHARTNAME
-              dockersha: $(</tmp/digest.txt)
-              dockerrepo: $COMPONENT_DOCKERREPO
-              dockertag: $IMAGE_TAG
-              builddate:  $(date)
-              gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-              giturl: $CIRCLE_REPOSITORY_URL
-              gitcommit: $CIRCLE_SHA1
-              gitbranch: $CIRCLE_BRANCH
-              gittag: "$CIRCLE_TAG"
-              buildid: $CIRCLE_BUILD_NUM
-              buildurl: $CIRCLE_BUILD_URL
-              buildnumber: $CIRCLE_BUILD_NUM
-              customaction: $COMPONENT_CUSTOMACTION
-              preaction: ""
-              postaction: "" 
+          application: $COMPONENT_APPLICATION
+          compname: $COMPONENT_NAME
+          compversion: $IMAGE_TAG
+          comptype: --docker
+          helmchart: $COMPONENT_CHARTNAME
+          dockersha: $(</tmp/digest.txt)
+          dockerrepo: $COMPONENT_DOCKERREPO
+          dockertag: $IMAGE_TAG
+          builddate:  $(date)
+          gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          giturl: $CIRCLE_REPOSITORY_URL
+          gitcommit: $CIRCLE_SHA1
+          gitbranch: $CIRCLE_BRANCH
+          gittag: "$CIRCLE_TAG"
+          buildid: $CIRCLE_BUILD_NUM
+          buildurl: $CIRCLE_BUILD_URL
+          buildnumber: $CIRCLE_BUILD_NUM
+          customaction: $COMPONENT_CUSTOMACTION
+          preaction: ""
+          postaction: "" 
+      - deployhub-orb/deploy:
+          compname: $COMPONENT_NAME
 workflows:
   on-commit:
     jobs:
