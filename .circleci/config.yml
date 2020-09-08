@@ -16,7 +16,6 @@ jobs:
       COMPONENT_DOCKERREPO: quay.io/hipsterstore/cartservice
       COMPONENT_IMAGENAME: hipsterstore/cartservice
       SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
-      DOCKER_REGISTRY: quay.io
     steps:
       - setup_remote_docker 
       - checkout
