@@ -19,7 +19,7 @@ jobs:
     steps:
       - setup_remote_docker 
       - checkout
-      - docker/check
+      - docker/check:
           registry: $DOCKER_REGISTRY
       - run:
           name: Image tag
