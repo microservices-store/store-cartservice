@@ -62,5 +62,3 @@ workflows:
     jobs:
       - build-push-dh-update:
           context: sharedvars 
-
-          
