@@ -3,7 +3,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@0.5.20
-  deployhub-orb: deployhub/deployhub-orb@1.76.0
+  deployhub-orb: deployhub/deployhub-orb@1.77.0
 
 jobs:
   build-push-dh-update:
@@ -12,10 +12,7 @@ jobs:
       COMPONENT_NAME: GLOBAL.SF Tech.Online Store Company.Purchase Processing.Cart Service.cartservice
       COMPONENT_VERSION: 1.2.2
       COMPONENT_CHARTNAME: chart/cartservice
-      COMPONENT_CUSTOMACTION: GLOBAL.HelmChart
-      COMPONENT_DOCKERREPO: quay.io/hipsterstore/cartservice
       COMPONENT_IMAGENAME: hipsterstore/cartservice
-      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
     steps:
       - setup_remote_docker 
       - checkout
@@ -23,7 +20,7 @@ jobs:
           registry: $DOCKER_REGISTRY
       - run:
           name: Image tag
-          command: echo export IMAGE_TAG=\"v${COMPONENT_VERSION}.${CIRCLE_BUILD_NUM}-g${SHORT_GIT_HASH}\" >> $BASH_ENV
+          command: echo export IMAGE_TAG=\"v${COMPONENT_VERSION}.${CIRCLE_BUILD_NUM}-g$(echo $CIRCLE_SHA1 | cut -c -7)\" >> $BASH_ENV
       - docker/build:
           registry: $DOCKER_REGISTRY
           image: $COMPONENT_IMAGENAME
@@ -31,29 +28,15 @@ jobs:
       - docker/push:
           registry: $DOCKER_REGISTRY
           image: $COMPONENT_IMAGENAME
-          digest-path: /tmp/digest.txt
           tag: $IMAGE_TAG
+          digest-path: /tmp/digest.txt
       - deployhub-orb/microservice_version_update:
-          application: $COMPONENT_APPLICATION
+          registry: $DOCKER_REGISTRY
+          image: $COMPONENT_IMAGENAME
+          tag: $IMAGE_TAG
+          helmchart: $COMPONENT_CHARTNAME
           compname: $COMPONENT_NAME
           compversion: $IMAGE_TAG
-          comptype: --docker
-          helmchart: $COMPONENT_CHARTNAME
-          dockersha: $(</tmp/digest.txt)
-          dockerrepo: $COMPONENT_DOCKERREPO
-          dockertag: $IMAGE_TAG
-          builddate:  $(date)
-          gitrepo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          giturl: $CIRCLE_REPOSITORY_URL
-          gitcommit: $CIRCLE_SHA1
-          gitbranch: $CIRCLE_BRANCH
-          gittag: "$CIRCLE_TAG"
-          buildid: $CIRCLE_BUILD_NUM
-          buildurl: $CIRCLE_BUILD_URL
-          buildnumber: $CIRCLE_BUILD_NUM
-          customaction: $COMPONENT_CUSTOMACTION
-          preaction: ""
-          postaction: "" 
       - deployhub-orb/deploy_component:
           compname: $COMPONENT_NAME
           compversion: $IMAGE_TAG
