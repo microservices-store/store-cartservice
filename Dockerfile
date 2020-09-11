@@ -5,6 +5,7 @@ RUN dotnet restore && \
     dotnet build && \
     dotnet publish -c release -r linux-musl-x64 -o /cartservice
 
+# dot net core app
 # cartservice
 FROM alpine:3.8
 ARG REPO_NAME
